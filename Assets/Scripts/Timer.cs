@@ -3,14 +3,33 @@ using UnityEngine;
 public class Timer : MonoBehaviour
 {
 	int ticksPassed;
+	bool isRunning;
 
 	void FixedUpdate()
 	{
-		ticksPassed++;
+		if (isRunning)
+		{
+			ticksPassed++;
+		}
 	}
 	
-	public double getSeconds()
+	public double GetSeconds()
 	{
 		return ticksPassed * Time.fixedDeltaTime;
+	}
+
+	public void StartTimer()
+	{
+		isRunning = true;
+	}
+
+	public void StopTimer()
+	{
+		isRunning = false;
+	}
+
+	public void ResetTimer()
+	{
+		ticksPassed = 0;
 	}
 }
