@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Whisper;
@@ -11,14 +12,21 @@ using Whisper.Utils;
 [RequireComponent(typeof(MicrophoneRecord))]
 public class VoiceToText : MonoBehaviour
 {
-    [SerializeField]
-    bool logOutput = true;
+    [SerializeField] string[] ignoreWords =
+    {
+        "a", "an", "the", "at", "by",
+        "of", "on", "to", "it",
+        "is", "am", "are", "be",
+        "of", "to", "its", "it's"
+    };
+    [SerializeField] bool logOutput;
     
     WhisperManager whisper;
     MicrophoneRecord microphoneRecord;
     WhisperStream stream;
-
-    string text;
+    
+    [HideInInspector] public string text;
+    [ReadOnly] [SerializeField] string lastSegment;
     
     void Awake()
     {
@@ -48,46 +56,50 @@ public class VoiceToText : MonoBehaviour
 
     void Update()
     {
+        DebugFrequencyTest();
+    }
+
+    // Just for testing purposes
+    void DebugFrequencyTest()
+    {
         if (Keyboard.current.fKey.wasPressedThisFrame)
         {
-            Debug.Log("The most frequently used word is: " + SortTextByWordUsage(text)[0]);
-        }
-
-        if (Keyboard.current.lKey.wasPressedThisFrame)
-        {
-            foreach (string word in SortTextByWordUsage(text))
+            foreach (KeyValuePair<string, int> item in GetSortedWordUsage(text))
             {
-                Debug.Log(word);
+                Debug.Log($"The word '{item.Key}' was used {item.Value} times");
             }
         }
+    }
+
+    public void Reset()
+    {
+        StopListening();
+        text = "";
+        lastSegment = "";
+        StartListening();
     }
 
     void OnSegmentFinished(WhisperResult segment)
     {
         string result = segment.Result;
-        string pattern = @"\[.*?\]";
+        
+        string pattern = @"\[.*?\]|\(.*?\)";
+
         string filteredResult = Regex.Replace(result, pattern, "");
-        
+
         text += filteredResult;
-        
+        lastSegment = segment.Result;
+
         if (logOutput)
         {
             Debug.Log(segment.Result);
         }
     }
     
-    string[] SortTextByWordUsage(string text)
+    public Dictionary<string, int> GetSortedWordUsage(string text)
     {
         string[] words = text.Split(new[] { ' ', '.', ',', ';', ':', '!', '?' }, StringSplitOptions.RemoveEmptyEntries);
-        var wordCount = new Dictionary<string, int>();
-
-        string[] ignoreWords =
-        {
-            "a", "an", "the", "at", "by",
-            "of", "on", "to", "it",
-            "is", "am", "are", "be",
-            "of", "to", "its", "it's"
-        };
+        var wordUsage = new Dictionary<string, int>();
 
         foreach (string word in words)
         {
@@ -98,21 +110,19 @@ public class VoiceToText : MonoBehaviour
                 continue;
             }
 
-            if (wordCount.ContainsKey(lowercaseWord))
+            if (wordUsage.ContainsKey(lowercaseWord))
             {
-                wordCount[lowercaseWord]++;
+                wordUsage[lowercaseWord]++;
             }
             else
             {
-                wordCount[lowercaseWord] = 1;
+                wordUsage[lowercaseWord] = 1;
             }
         }
+        
+        Dictionary<string, int> sortedWordUsage = wordUsage.OrderByDescending(kv => kv.Value)
+            .ToDictionary(kv => kv.Key, kv => kv.Value);
 
-        string[] sortedWords = wordCount.OrderByDescending(kv => kv.Value)
-            .ThenBy(kv => kv.Key)
-            .Select(kv => kv.Key)
-            .ToArray();
-
-        return sortedWords;
+        return sortedWordUsage;
     }
 }
