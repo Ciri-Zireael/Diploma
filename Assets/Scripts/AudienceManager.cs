@@ -66,7 +66,6 @@ public class AudienceManager : MonoBehaviour
         return selectedSeats;
     }
 
-    // Update is called once per frame
     void Update()
     {
         
