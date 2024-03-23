@@ -8,6 +8,7 @@ public class AudienceManager : MonoBehaviour
 {
 
 	[SerializeField] private GameObject[] avatars;
+    [SerializeField] private RuntimeAnimatorController[] avatarAnimators;
     [SerializeField] private int numberOfSeatsToFill;
     private List<Vector3> _allSittingPositions;
 
@@ -48,6 +49,9 @@ public class AudienceManager : MonoBehaviour
                 Quaternion.Euler(0f, 180f, 0f));
             avatarInstance.transform.localScale = new Vector3(52,52,52);
 
+            avatarInstance.AddComponent<Animator>();
+            avatarInstance.GetComponent<Animator>().runtimeAnimatorController = avatarAnimators[idx];
+            
             idx = (idx + 1) % avatars.Length;
         }
     }

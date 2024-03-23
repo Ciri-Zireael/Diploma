@@ -621,6 +621,12 @@ MonoBehaviour:
   - {fileID: 919132149155446097, guid: e177e71e85cedea4aac9a95d1f37cccd, type: 3}
   - {fileID: 919132149155446097, guid: d9f6bf7d4d5b11b41aba1273ff467a50, type: 3}
   - {fileID: 919132149155446097, guid: eea5731ac5ea79946a7610938ae8fc40, type: 3}
+  avatarAnimators:
+  - {fileID: 9100000, guid: 5db5cfec32594ba4183251ba335ef7ff, type: 2}
+  - {fileID: 9100000, guid: 0b2fecb2054d13d4090af07e9bd1fbb9, type: 2}
+  - {fileID: 9100000, guid: 737db75a9b2840449800596b7202214e, type: 2}
+  - {fileID: 9100000, guid: 4999020a663902347b1a68d4fe967a54, type: 2}
+  - {fileID: 9100000, guid: 24005e8335a64fd4d8ce16d19926bed3, type: 2}
   numberOfSeatsToFill: 12
 --- !u!4 &1070231809
 Transform:
