@@ -36,7 +36,7 @@ public class AudienceManager : MonoBehaviour
             throw new Exception("Not enough sitting spaces for given number of avatars");
         }
 
-        HashSet<Vector3> selectedSeats = SelectSeats(numberOfAvatarsToPlace);
+        IEnumerable<Vector3> selectedSeats = SelectSeats(numberOfAvatarsToPlace);
 
         Vector3 avatarOffset = new Vector3(0, -41, -8);    // still needs some adjustments
         int idx = 0;
@@ -57,14 +57,17 @@ public class AudienceManager : MonoBehaviour
     }
 
     // selecting given number of UNIQUE sitting places for avatars
-    HashSet<Vector3> SelectSeats(int numberOfSeats)
+    IEnumerable<Vector3> SelectSeats(int numberOfSeats)
     {
-        HashSet<Vector3> selectedSeats = new HashSet<Vector3>();
+        HashSet<Vector3> availableSeats = new HashSet<Vector3>(_allSittingPositions);
+        List<Vector3> selectedSeats = new List<Vector3>();
+        System.Random random = new System.Random();
         
         while (selectedSeats.Count < numberOfSeats)
         {   
-            int randomIndex = Random.Range(0, _allSittingPositions.Count);
-            selectedSeats.Add(_allSittingPositions[randomIndex]);
+            Vector3 randomSeat = availableSeats.ElementAt(random.Next(availableSeats.Count));
+            selectedSeats.Add(randomSeat);
+            availableSeats.Remove(randomSeat);
         }
 
         return selectedSeats;
