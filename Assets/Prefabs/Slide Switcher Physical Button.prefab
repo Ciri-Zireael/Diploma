@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 2872102269450348784}
   - component: {fileID: 6109655038286268748}
   - component: {fileID: 7536491427996726028}
+  - component: {fileID: -5471092215558308602}
   m_Layer: 0
-  m_Name: Slide Key
+  m_Name: Slide Switcher Physical Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -147,5 +148,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slideHolder: {fileID: 0}
-  cooldownTime: 0.5
   direction: 0
+--- !u!114 &-5471092215558308602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562205862537274810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ac857824a6948b69bf1608c893c131f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldownTime: 0.5

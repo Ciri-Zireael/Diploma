@@ -50,8 +50,8 @@ public class VoiceToText : MonoBehaviour
 
     public void StopListening()
     {
-        microphoneRecord.StopRecord();
         stream.StopStream();
+        microphoneRecord.StopRecord();
     }
 
     void Update()
